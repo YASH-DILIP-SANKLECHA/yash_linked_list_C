@@ -1,0 +1,318 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int info;
+    struct Node *next;
+};
+
+struct Node *first = NULL;
+
+void insert_front(int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = first;
+    first = newNode;
+}
+
+void insert_rear(int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = NULL;
+    if (first == NULL) {
+        first = newNode;
+        return;
+    }
+    struct Node *temp = first;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}
+
+void insert_after(int key, int value) {
+    struct Node *temp = first;
+    while (temp != NULL && temp->info != key)
+        temp = temp->next;
+    if (temp == NULL) {
+        printf("Element %d not found.\n", key);
+        return;
+    }
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void insert_before(int key, int value) {
+    if (first == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    if (first->info == key) {
+        insert_front(value);
+        return;
+    }
+    struct Node *temp = first;
+    while (temp->next != NULL && temp->next->info != key)
+        temp = temp->next;
+    if (temp->next == NULL) {
+        printf("Element %d not found.\n", key);
+        return;
+    }
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void insert_at_position(int pos, int value) {
+    if (pos < 1) {
+        printf("Invalid position.\n");
+        return;
+    }
+    if (pos == 1) {
+        insert_front(value);
+        return;
+    }
+    struct Node *temp = first;
+    for (int i = 1; temp != NULL && i < pos - 1; i++)
+        temp = temp->next;
+    if (temp == NULL) {
+        printf("Position out of range.\n");
+        return;
+    }
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void delete_front() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    struct Node *temp = first;
+    first = first->next;
+    free(temp);
+}
+
+void delete_rear() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    if (first->next == NULL) {
+        free(first);
+        first = NULL;
+        return;
+    }
+    struct Node *temp = first;
+    while (temp->next->next != NULL)
+        temp = temp->next;
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void delete_after(int key) {
+    struct Node *temp = first;
+    while (temp != NULL && temp->info != key)
+        temp = temp->next;
+    if (temp == NULL || temp->next == NULL) {
+        printf("Cannot delete after %d.\n", key);
+        return;
+    }
+    struct Node *delNode = temp->next;
+    temp->next = delNode->next;
+    free(delNode);
+}
+
+void delete_before(int key) {
+    if (first == NULL || first->next == NULL) {
+        printf("Not enough nodes.\n");
+        return;
+    }
+    if (first->next->info == key) {
+        delete_front();
+        return;
+    }
+    struct Node *prev = NULL, *curr = first;
+    while (curr->next != NULL && curr->next->info != key) {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr->next == NULL) {
+        printf("Element %d not found.\n", key);
+        return;
+    }
+    prev->next = curr->next;
+    free(curr);
+}
+
+void delete_at_position(int pos) {
+    if (first == NULL || pos < 1) {
+        printf("Invalid position or empty list.\n");
+        return;
+    }
+    if (pos == 1) {
+        delete_front();
+        return;
+    }
+    struct Node *temp = first;
+    for (int i = 1; temp != NULL && i < pos - 1; i++)
+        temp = temp->next;
+         if (temp == NULL) {
+        printf("Position out of range.\n");
+        return;
+    }
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->info = value;
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void delete_front() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    struct Node *temp = first;
+    first = first->next;
+    free(temp);
+}
+
+void delete_rear() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    if (first->next == NULL) {
+        free(first);
+        first = NULL;
+        return;
+    }
+    struct Node *temp = first;
+    while (temp->next->next != NULL)
+        temp = temp->next;
+    free(temp->next);
+    temp->next = NULL;
+}
+
+void delete_after(int key) {
+    struct Node *temp = first;
+    while (temp != NULL && temp->info != key)
+        temp = temp->next;
+    if (temp == NULL || temp->next == NULL) {
+        printf("Cannot delete after %d.\n", key);
+        return;
+    }
+    struct Node *delNode = temp->next;
+    temp->next = delNode->next;
+    free(delNode);
+}
+
+void delete_before(int key) {
+    if (first == NULL || first->next == NULL) {
+        printf("Not enough nodes.\n");
+        return;
+    }
+    if (first->next->info == key) {
+        delete_front();
+        return;
+    }
+    struct Node *prev = NULL, *curr = first;
+    while (curr->next != NULL && curr->next->info != key) {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (curr->next == NULL) {
+        printf("Element %d not found.\n", key);
+        return;
+    }
+    prev->next = curr->next;
+    free(curr);
+}
+
+void delete_at_position(int pos) {
+    if (first == NULL || pos < 1) {
+        printf("Invalid position or empty list.\n");
+        return;
+    }
+    if (pos == 1) {
+        delete_front();
+        return;
+    }
+    struct Node *temp = first;
+    for (int i = 1; temp != NULL && i < pos - 1; i++)
+        temp = temp->next;
+    if (temp == NULL || temp->next == NULL) {
+        printf("Position out of range.\n");
+        return;
+    }
+    struct Node *delNode = temp->next;
+    temp->next = delNode->next;
+    free(delNode);
+}
+
+void display_forward() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    struct Node *temp = first;
+    printf("List (front → rear): ");
+    while (temp != NULL) {
+        printf("%d ", temp->info);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void display_reverse_recursive(struct Node *node) {
+    if (node == NULL)
+        return;
+    display_reverse_recursive(node->next);
+    printf("%d ", node->info);
+}
+
+void display_reverse() {
+    if (first == NULL) {
+        printf("List empty.\n");
+        return;
+    }
+    printf("List (rear → front): ");
+    display_reverse_recursive(first);
+    printf("\n");
+}
+
+int main() {
+    int choice, val, key, pos;
+    while (1) {
+        printf("\n---- Singly Linked List Operations ----\n");
+        printf("1.Insert Front\n2.Insert Rear\n3.Insert After\n4.Insert Before\n5.Insert At Position\n");
+        printf("6.Delete Front\n7.Delete Rear\n8.Delete After\n9.Delete Before\n10.Delete At Position\n");
+        printf("11.Display Forward\n12.Display Reverse\n13.Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1: printf("Enter value: "); scanf("%d", &val); insert_front(val); break;
+            case 2: printf("Enter value: "); scanf("%d", &val); insert_rear(val); break;
+            case 3: printf("After which element? "); scanf("%d", &key);
+                    printf("Enter value: "); scanf("%d", &val); insert_after(key, val); break;
+            case 4: printf("Before which element? "); scanf("%d", &key);
+                    printf("Enter value: "); scanf("%d", &val); insert_before(key, val); break;
+            case 5: printf("Enter position: "); scanf("%d", &pos);
+                    printf("Enter value: "); scanf("%d", &val); insert_at_position(pos, val); break;
+            case 6: delete_front(); break;
+            case 7: delete_rear(); break;
+            case 8: printf("After which element? "); scanf("%d", &key); delete_after(key); break;
+            case 9: printf("Before which element? "); scanf("%d", &key); delete_before(key); break;
+            case 10: printf("Enter position: "); scanf("%d", &pos); delete_at_position(pos); break;
+            case 11: display_forward(); break;
+            case 12: display_reverse(); break;
+            case 13: exit(0);
+            default: printf("Invalid choice.\n");
+        }
+    }
+    return 0;
+}
